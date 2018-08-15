@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.lancefallon</groupId>
+    <artifactId>rest-api-demo</artifactId>
+    <version>1.0</version>
+    <packaging>jar</packaging>
+
+    <name>rest-api-demo</name>
+    <description>Demo rest api for Spring Boot</description>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.0.3.RELEASE</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <java.version>8</java.version>
+        <project.build.finalName>rest-api-demo</project.build.finalName>
+        <docker.private.repo>${AZ_DOCKER_REGISTRY_URL}</docker.private.repo>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-tomcat</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+
+            <!-- ensure packaging is .war -->
+            <!--<plugin>-->
+            <!--<groupId>com.spotify</groupId>-->
+            <!--<artifactId>docker-maven-plugin</artifactId>-->
+            <!--<version>1.1.1</version>-->
+            <!--<configuration>-->
+            <!--<imageName>rest-api</imageName>-->
+            <!--<dockerDirectory>${basedir}/src/main/resources/docker</dockerDirectory>-->
+            <!--&lt;!&ndash; copies war file from target into root dir of docker image &ndash;&gt;-->
+            <!--<resources>-->
+            <!--<resource>-->
+            <!--<targetPath>/</targetPath> &lt;!&ndash; one folder up from target directory &ndash;&gt;-->
+            <!--<directory>${project.build.directory}</directory> &lt;!&ndash; target folder &ndash;&gt;-->
+            <!--<include>${project.build.finalName}.war</include> &lt;!&ndash; name of artifact (PALAS2.0.war) &ndash;&gt;-->
+            <!--</resource>-->
+            <!--</resources>-->
+            <!--</configuration>-->
+            <!--<dependencies>-->
+            <!--<dependency>-->
+            <!--<groupId>javax.activation</groupId>-->
+            <!--<artifactId>activation</artifactId>-->
+            <!--<version>1.1.1</version>-->
+            <!--</dependency>-->
+            <!--</dependencies>-->
+            <!--</plugin>-->
+
+            <plugin>
+                <groupId>com.spotify</groupId>
+                <artifactId>docker-maven-plugin</artifactId>
+                <version>1.1.1</version>
+                <configuration>
+                    <imageName>${docker.private.repo}/rest-api-demo-app:2.0</imageName>
+                    <dockerDirectory>${basedir}/src/main/resources/docker-alternate</dockerDirectory>
+                    <!-- copies war file from target into root dir of docker image -->
+                    <resources>
+                        <resource>
+                            <targetPath>/</targetPath> <!-- one folder up from target directory -->
+                            <directory>${project.build.directory}</directory> <!-- target folder -->
+                            <include>${project.build.finalName}.jar</include> <!-- name of artifact (PALAS2.0.war) -->
+                        </resource>
+                    </resources>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>javax.activation</groupId>
+                        <artifactId>activation</artifactId>
+                        <version>1.1.1</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+
+            <!-- ensure packaging is .jar -->
+            <!--<plugin>-->
+            <!--<groupId>com.spotify</groupId>-->
+            <!--<artifactId>docker-maven-plugin</artifactId>-->
+            <!--<version>1.1.1</version>-->
+            <!--<configuration>-->
+            <!--<imageName>rest-api</imageName>-->
+            <!--<baseImage>java</baseImage>-->
+            <!--<entryPoint>["java", "-jar", "/${project.build.finalName}.jar"]</entryPoint>-->
+            <!--&lt;!&ndash; copy the service's jar file from target into the root directory of the image &ndash;&gt;-->
+            <!--<resources>-->
+            <!--<resource>-->
+            <!--<targetPath>/</targetPath>-->
+            <!--<directory>${project.build.directory}</directory>-->
+            <!--<include>${project.build.finalName}.jar</include>-->
+            <!--</resource>-->
+            <!--</resources>-->
+            <!--</configuration>-->
+            <!--<dependencies>-->
+            <!--<dependency>-->
+            <!--<groupId>javax.activation</groupId>-->
+            <!--<artifactId>activation</artifactId>-->
+            <!--<version>1.1.1</version>-->
+            <!--</dependency>-->
+            <!--</dependencies>-->
+            <!--</plugin>-->
+
+        </plugins>
+    </build>
+
+
+</project>
